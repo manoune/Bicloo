@@ -1,0 +1,103 @@
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tabs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:tabMode="fixed"
+            app:tabGravity="fill"/>
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:paddingTop="48dp" />
+
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/bottom_sheet"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:clipToPadding="true"
+        android:background="@android:color/white"
+        app:layout_behavior="android.support.design.widget.BottomSheetBehavior"
+        >
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            >
+            <ImageView
+                android:id="@+id/bike_img"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/cyclo"
+                android:padding="10dp"
+                />
+            <TextView
+                android:id="@+id/station"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Station"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@+id/bike_img"
+                android:layout_alignTop="@+id/bike_img"
+                android:textStyle="bold"
+                android:textSize="16sp"/>
+            <TextView
+                android:id="@+id/availableStands"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="11 places restantes"
+                android:layout_alignLeft="@+id/station"
+                android:layout_below="@+id/station"
+                android:textSize="16sp"/>
+            <TextView
+                android:id="@+id/availableBikes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="3 bicloos"
+                android:layout_alignLeft="@+id/availableStands"
+                android:layout_below="@+id/availableStands"
+                android:textSize="16sp"/>
+            <TextView
+                android:id="@+id/status"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Ouvert"
+                android:layout_alignLeft="@+id/availableBikes"
+                android:layout_below="@+id/availableBikes"
+                android:textSize="16sp"/>
+            <TextView
+                android:id="@+id/banking"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Terminal de paiement"
+                android:layout_alignLeft="@+id/status"
+                android:layout_below="@+id/status"
+                android:textSize="16sp"/>
+        </RelativeLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
+</android.support.design.widget.CoordinatorLayout>

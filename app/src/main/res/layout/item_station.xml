@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp"
+    >
+
+    <ImageView
+        android:id="@+id/bike_img"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/cyclo"
+        android:padding="10dp"
+        />
+
+    <TextView
+        android:id="@+id/station"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/black"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@+id/bike_img"
+        android:layout_alignTop="@+id/bike_img"
+        android:textStyle="bold"
+        tools:text="Station"
+        />
+
+    <TextView
+        android:id="@+id/availableStands"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/holo_green_dark"
+        android:layout_alignLeft="@+id/station"
+        android:layout_below="@+id/station"
+        tools:text="11 places restantes"
+        />
+
+    <TextView
+        android:id="@+id/availableBikes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/holo_green_dark"
+        android:layout_alignLeft="@+id/availableStands"
+        android:layout_below="@+id/availableStands"
+        tools:text="3 bicloos"
+        />
+
+</RelativeLayout>

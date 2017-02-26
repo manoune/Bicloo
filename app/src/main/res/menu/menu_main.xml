@@ -1,0 +1,31 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_refresh"
+        android:icon="@drawable/ic_sync_white_24dp"
+        android:title="Refresh"
+        app:showAsAction="always"/>
+		
+	<item
+		android:id="@+id/menuSort"
+		android:icon="@drawable/ic_more_vert_white_24dp"
+		android:title="Menu"
+		app:showAsAction="ifRoom">
+		<menu>
+			<item
+				android:id="@+id/menuSortOpen"
+				android:title="Stations ouvertes"
+				android:visible="true"
+				android:checkable="true"
+				app:showAsAction="always" />
+			<item
+				android:id="@+id/menuSortAvailable"
+				android:title="Bicloo disponibles"
+				android:visible="true"
+				android:checkable="true"
+				app:showAsAction="always" />
+		</menu>
+	</item>
+
+</menu>
