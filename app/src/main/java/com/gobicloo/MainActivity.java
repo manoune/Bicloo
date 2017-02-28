@@ -36,32 +36,6 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     private TextView statusTextView;
     private TextView bankingTextView;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main2);
-
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        viewPager = (ViewPager) findViewById(R.id.viewpager);
-        setupViewPager(viewPager);
-
-        tabLayout = (TabLayout) findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(viewPager);
-
-        View bottomSheet = findViewById(R.id.bottom_sheet);
-        mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
-
-        nameTextView = (TextView) findViewById(R.id.station);
-        availableBikesTextView = (TextView) findViewById(R.id.availableStands);
-        availableStandsTextView = (TextView) findViewById(R.id.availableBikes);
-        statusTextView = (TextView) findViewById(R.id.status);
-        bankingTextView = (TextView) findViewById(R.id.banking);
-    }
-
     public BottomSheetBehavior getmBottomSheetBehavior() {
         return mBottomSheetBehavior;
     }
@@ -74,6 +48,10 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
         this.stations = stations;
     }
 
+    /**
+     * Display infos in bottom sheet for a station
+     * @param station
+     */
     public void setBottomSheetForStation(Station station) {
         nameTextView.setText(station.getNameForDisplay());
         availableBikesTextView.setText(String.valueOf(station.getAvailable_bikes()) + " Bicloo");
@@ -89,78 +67,31 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
             bankingTextView.setText("Pas de terminal de paiement");
         }
     }
-    private void setupViewPager(ViewPager viewPager) {
-        mapsFragment = new MapsFragment();
-        stationListFragment = new StationListFragment();
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
-        adapter.addFragment(mapsFragment, "Carte");
-        adapter.addFragment(stationListFragment, "Liste");
-        viewPager.setAdapter(adapter);
-        viewPager.addOnPageChangeListener(this);
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
+        setupViewPager(viewPager);
 
+        tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(viewPager);
+
+        View bottomSheet = findViewById(R.id.bottom_sheet);
+        mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+
+        nameTextView = (TextView) findViewById(R.id.station);
+        availableBikesTextView = (TextView) findViewById(R.id.availableStands);
+        availableStandsTextView = (TextView) findViewById(R.id.availableBikes);
+        statusTextView = (TextView) findViewById(R.id.status);
+        bankingTextView = (TextView) findViewById(R.id.banking);
+
+        // Launch Download task
         new DownloadTask(this, stationListFragment).execute();
-    }
-
-    @Override
-    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-    }
-
-    @Override
-    public void onPageSelected(int position) {
-        getmBottomSheetBehavior().setState(BottomSheetBehavior.STATE_COLLAPSED);
-    }
-
-    @Override
-    public void onPageScrollStateChanged(int state) {
-
-    }
-
-    class ViewPagerAdapter extends FragmentPagerAdapter {
-        private final List<Fragment> mFragmentList = new ArrayList<>();
-        private final List<String> mFragmentTitleList = new ArrayList<>();
-
-        public ViewPagerAdapter(FragmentManager manager) {
-            super(manager);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return mFragmentList.get(position);
-        }
-
-        @Override
-        public int getCount() {
-            return mFragmentList.size();
-        }
-
-        public void addFragment(Fragment fragment, String title) {
-            mFragmentList.add(fragment);
-            mFragmentTitleList.add(title);
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return mFragmentTitleList.get(position);
-        }
-    }
-
-    @Override
-    public void onBackPressed() {
-        /*String tag = getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName();
-        if(tag.equals("LIST")) {
-            viewPager.setCurrentItem(0);
-        }*/
-        // TODO à voir pour quand on fait back depuis le fragment 1 on revienne sur le 0
-
-        super.onBackPressed();
-    }
-
-    public void locatePointOnMap(double lat, double longitude) {
-        viewPager.setCurrentItem(0);
-        mapsFragment.setLocation(lat, longitude);
     }
 
     @Override
@@ -180,6 +111,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
             case R.id.menuSort:
                 return true;
             case R.id.menuSortAvailable:
+                // Filter : bikes available
                 if(!item.isChecked()) {
                     filter = "BIKE_AVAILABLE";
                     item.setChecked(true);
@@ -187,11 +119,12 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
                     filter = "BIKE_ALL";
                     item.setChecked(false);
                 }
-                // TODO sur la carte
-                // Filtre sur la vue liste
+                // Filter on listView
                 stationListFragment.getAdapter().getFilter().filter(filter);
+                // TODO sur la carte
                 return true;
             case R.id.menuSortOpen:
+                // Filter : is station open
                 if(!item.isChecked()) {
                     filter = "OPEN";
                     item.setChecked(true);
@@ -199,15 +132,65 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
                     filter = "BIKE_ALL";
                     item.setChecked(false);
                 }
-                // TODO sur la carte
-                // Filtre sur la vue liste
+                // Filter on listView
                 stationListFragment.getAdapter().getFilter().filter(filter);
+                // TODO sur la carte
                 return true;
 
             default:
-                // If we got here, the user's action was not recognized.
-                // Invoke the superclass to handle it.
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        getmBottomSheetBehavior().setState(BottomSheetBehavior.STATE_COLLAPSED);
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        // TODO à voir pour quand on fait back depuis le fragment 1 on revienne sur le 0
+        /*String tag = getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName();
+        if(tag.equals("LIST")) {
+            viewPager.setCurrentItem(0);
+        }*/
+
+        super.onBackPressed();
+    }
+
+    /**
+     * Set up view pager with Fragments
+     * @param viewPager
+     */
+    private void setupViewPager(ViewPager viewPager) {
+        mapsFragment = new MapsFragment();
+        stationListFragment = new StationListFragment();
+
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+
+        adapter.addFragment(mapsFragment, "Carte");
+        adapter.addFragment(stationListFragment, "Liste");
+        viewPager.setAdapter(adapter);
+        viewPager.addOnPageChangeListener(this);
+    }
+
+    /**
+     * Location Station on Map
+     * @param lat
+     * @param longitude
+     */
+    public void locateStationOnMap(double lat, double longitude) {
+        viewPager.setCurrentItem(0);
+        mapsFragment.setLocation(lat, longitude);
     }
 }

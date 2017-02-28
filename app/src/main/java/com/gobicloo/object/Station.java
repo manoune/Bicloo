@@ -1,6 +1,13 @@
 package com.gobicloo.object;
 
-public class Station {
+import org.apache.commons.lang3.text.WordUtils;
+
+import java.io.Serializable;
+
+/**
+ * Object Station
+ */
+public class Station implements Serializable {
 
     private String number;
     private String name;
@@ -111,6 +118,13 @@ public class Station {
         this.position = position;
     }
 
+    /**
+     * Display station name correctly
+     * @return
+     */
+    public String getNameForDisplay() {
+        return WordUtils.capitalizeFully(this.name.split("-")[1]);
+    }
     @Override
     public String toString() {
         return "Station{" +

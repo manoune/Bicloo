@@ -1,6 +1,11 @@
 package com.gobicloo.object;
 
-public class Position {
+import java.io.Serializable;
+
+/**
+ * Object Position
+ */
+public class Position implements Serializable {
     private float lat;
     private float lng;
 
